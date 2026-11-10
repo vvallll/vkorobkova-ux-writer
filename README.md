@@ -1,6 +1,6 @@
 # ✦ UX writer portfolio
 
-**⊹ Открыть · Open it:** [vvallll.github.io/ux-writer-portfolio](https://vvallll.github.io/ux-writer-portfolio/)
+**⊹ Открыть · Open it:** [vvallll.github.io/vkorobkova-ux-writer](https://vvallll.github.io/vkorobkova-ux-writer/)
 
 ![Первый экран портфолио: «Простые слова в этом большом безумном мире» · The first screen of the portfolio](screenshots/home.jpg)
 
