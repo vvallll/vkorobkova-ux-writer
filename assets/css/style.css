@@ -1,0 +1,482 @@
+/* Портфолио — все стили.
+   Размеры сняты с макета в Figma: ширина 1440, сетка 12 колонок по 72 px, промежуток 24, поля 156. */
+
+:root {
+  --bg: #f5f5f5;
+  --ink: #333;
+  --dark: #56544b;
+  --mauve: #ac959d;
+  --struck: #8a8a8a; /* серый — только у зачёркнутых примеров */
+  --line: #333;
+
+  --gap: 24px;
+  --W: min(1128px, 100% - 48px); /* ширина сетки */
+
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  --sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 72px; } /* якоря не прячутся под закреплённой шапкой */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 20px/1.2 var(--sans);
+  overflow-x: hidden;
+}
+h1, h2, h3, p, figure, dl, dd { margin: 0; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; height: auto; }
+p, dd, li, td, figcaption, .card__info { text-wrap: pretty; } /* без коротких последних строк */
+h2, h3 { text-wrap: balance; }
+.nobr { white-space: nowrap; } /* слова с дефисом не рвутся: где-то, по-русски */
+/* короткие слова (1–2 буквы), числа и тире привязаны в HTML через &nbsp; — ../tools/nbsp.py */
+
+.wrap { width: var(--W); margin: 0 auto; position: relative; }
+.line { border-bottom: 1px solid var(--line); }
+
+/* ---------- заголовки и текст ---------- */
+
+.h1 {
+  font: 700 48px/64px var(--mono);
+  text-transform: uppercase;
+}
+.h2 {
+  font: 700 36px/1.32 var(--mono);
+}
+.h3 {
+  font: 700 24px/1.32 var(--mono);
+}
+.text { max-width: 552px; }
+.text p + p { margin-top: 24px; }
+
+.tag {
+  display: inline-block;
+  background: var(--dark);
+  color: var(--bg);
+  font: italic 12px/15px var(--sans); /* все плашки — курсивом */
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+
+/* ---------- шапка ---------- */
+
+.header {                     /* закреплена сверху при прокрутке */
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg);
+  height: 72px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font: 16px/1 var(--mono);
+  color: #000;
+  border-bottom: 1px solid var(--line);
+}
+.header__name { font-weight: 700; }
+.header__nav {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 72px;
+}
+.header__nav a:hover, .header__nav a[aria-current] { text-decoration: underline; text-underline-offset: 6px; }
+.header__lang b { font-weight: 700; }
+.header__lang span { padding: 0 10px; }
+.header__menu { display: contents; } /* на ноутбуке разделы и язык стоят прямо в шапке */
+.header__burger { display: none; }
+.header__lang a:hover { text-decoration: underline; text-underline-offset: 6px; } /* переключатель языка: текущий жирный, другой — ссылка */
+
+/* ---------- первый экран ---------- */
+
+.hero {                       /* шапка + первый экран помещаются в окно браузера; в макете 930 — это потолок */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(560px, calc(100vh - 72px), 930px);
+  min-height: clamp(560px, calc(100svh - 72px), 930px);
+  border-bottom: 1px solid var(--line);
+}
+.hero .wrap { padding: 48px 0 144px; } /* текст чуть выше середины, как в макете */
+.hero__text { max-width: 640px; margin-top: 36px; text-wrap: balance; } /* две строки примерно одной длины */
+.hero__text--intro { max-width: 650px; } /* главная: три ровные строки на 1440 */
+.hero__meta { list-style: none; margin: 24px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 28px; font-size: 14px; line-height: 17px; }
+.hero__meta li { display: flex; align-items: center; gap: 8px; }
+.hero__meta svg { width: 16px; height: 16px; flex: none; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 28px; }
+
+/* кнопки — как ссылки в «Связаться со мной» */
+.btn { display: inline-block; background: var(--dark); color: var(--bg); font: italic 18px/22px var(--sans); padding: 6px 12px; border: 1px solid var(--dark); }
+.btn:hover { background: #000; border-color: #000; }
+.btn--line { background: none; color: var(--dark); }
+.btn--line:hover { background: var(--dark); border-color: var(--dark); color: var(--bg); }
+
+.hero__block {               /* блок под картинку: от 9-й колонки до правого края */
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  left: calc(50% - var(--W) / 2 + (var(--W) + var(--gap)) * 2 / 3);
+  background: var(--dark);
+}
+.hero__block--fade {          /* главная: левый край плавно уходит в фон — у текста больше воздуха */
+  --fade: linear-gradient(to right, rgba(0,0,0,0.000) 0%, rgba(0,0,0,0.020) 5%, rgba(0,0,0,0.074) 10%, rgba(0,0,0,0.156) 15%, rgba(0,0,0,0.259) 20%, rgba(0,0,0,0.376) 25%, rgba(0,0,0,0.500) 30%, rgba(0,0,0,0.624) 35%, rgba(0,0,0,0.741) 40%, rgba(0,0,0,0.844) 45%, rgba(0,0,0,0.926) 50%, rgba(0,0,0,0.980) 55%, rgba(0,0,0,1.000) 60%);
+  -webkit-mask-image: var(--fade);
+  mask-image: var(--fade);
+}
+.hero__photo {                /* фото: монохром в цвет блока, уходит в фон вместе с ним */
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 0% 50%; /* человек правее середины — подальше от прозрачного края */
+  filter: grayscale(1) contrast(1.1);
+  mix-blend-mode: soft-light;
+}
+.hero__block--fade { isolation: isolate; }
+.hero__block--mauve { background: var(--mauve); display: flex; align-items: center; justify-content: center; }
+.hero__phone { height: calc(100% - 80px); max-height: 826px; width: auto; max-width: 92%; object-fit: contain; } /* телефон по высоте блока */
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  font-size: 14px;
+  line-height: 17px;
+  margin-bottom: 18px;
+}
+.back:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+.facts { display: flex; flex-wrap: wrap; gap: 24px 72px; margin-top: 36px; } /* между плашками везде 72 (колонка сетки): после самой длинной подписи «UX researcher» остаётся 49 */
+.facts dd { font-size: 12px; line-height: 15px; margin-top: 12px; width: 0; white-space: nowrap; } /* ширину пункта задаёт плашка, подпись может выходить вправо */
+
+/* скотч и звезда могут выходить за сетку: стоят ближе к краю страницы, на 40–70% поля */
+.tape { position: absolute; z-index: 3; height: 61px; pointer-events: none; }
+.tape--mauve { background: var(--mauve); }
+.tape--dark { background: var(--dark); }
+.hero .tape--home { width: 360px; left: calc((100% - var(--W)) / 2 * .4); bottom: -34px; transform: rotate(-3.5deg); }
+.hero .tape--project { width: 360px; height: 62px; left: calc(50% - var(--W) / 2 + 725px); bottom: -25px; transform: rotate(4.5deg); }
+/* у края скотч стоит на том же расстоянии, что на главной: 20% поля (62 px при 1440) */
+.hero .tape--keepsake { width: 340px; height: 60px; left: calc((100% - var(--W)) * .2); bottom: -30px; transform: rotate(2.5deg); } /* Keepsake: низ шапки, слева */
+.hero .tape--challenge { width: 340px; height: 60px; left: calc(50% - var(--W) / 2 + 540px); bottom: -28px; transform: rotate(-4deg); } /* челлендж: низ шапки, на краю сиреневого блока */
+/* скотч только на линиях между разделами: пустой блок высотой 0 стоит ровно на линии и не обрезается разделами */
+.tape-line { position: relative; height: 0; z-index: 3; }
+.tape--line-right { width: 316px; height: 56px; right: calc((100% - var(--W)) * .2); top: -28px; transform: rotate(3.7deg); } /* no commas: перед «Как звучит» */
+.tape--line-left { width: 340px; height: 58px; left: calc((100% - var(--W)) * .2); top: -29px; transform: rotate(-3.5deg); } /* no commas: перед «Итогом» */
+.tape--ks-cta { width: 330px; height: 58px; right: calc((100% - var(--W)) * .2); top: -29px; transform: rotate(-2.5deg); } /* Keepsake: перед «Хотите обсудить?», справа */
+.tape--ch-cta { width: 320px; height: 56px; left: calc((100% - var(--W)) * .2); top: -28px; transform: rotate(3deg); } /* челлендж: перед «Хотите обсудить?», слева */
+
+/* ---------- обо мне ---------- */
+
+.about .wrap { padding-top: 88px; padding-bottom: 88px; } /* как у остальных разделов */
+.about__text { margin-left: auto; text-align: right; }
+.skills { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: 40px; } /* навыки: строка инструментов, строка умений */
+.skills__row { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.about .h2 { margin-top: 72px; } /* «Мой опыт»: как между блоками на страницах проектов */
+.about .about__title { margin-top: 0; text-align: right; } /* «Обо мне» над правой колонкой */
+
+.timeline { position: relative; height: 176px; margin-top: 64px; } /* 64 от заголовка до самой высокой подписи — меньше, чем 72 до заголовка сверху */
+.timeline::before {            /* ось — на всю ширину страницы */
+  content: "";
+  position: absolute;
+  left: -100vw; right: -100vw;
+  top: 139px;
+  border-top: 1px solid var(--line);
+}
+.timeline ol { list-style: none; margin: 0; padding: 0; }
+.timeline li {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 14px;
+  line-height: 17px;
+}
+/* пять пунктов через 180 px; справа остаётся место под скотч */
+.timeline li:nth-child(1) { left: 80px; }
+.timeline li:nth-child(2) { left: 260px; }
+.timeline li:nth-child(3) { left: 440px; }
+.timeline li:nth-child(4) { left: 620px; }
+.timeline li:nth-child(5) { left: 800px; }
+.tl__label { height: 34px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; white-space: nowrap; } /* две строки: что это и роль */
+.timeline b { font-weight: 700; }
+.timeline b a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.timeline li::before {          /* риска: у нечётных длинная, у чётных короткая — подписи на разной высоте и не слипаются */
+  content: "";
+  order: 1;
+  width: 1px; height: 76px;
+  margin-top: 10px;
+  background: var(--dark);
+}
+.timeline li::after {           /* точка на оси */
+  content: "";
+  order: 2;
+  width: 14px; height: 14px;
+  margin-top: 12px;
+  border-radius: 50%;
+  background: var(--dark);
+}
+.timeline time { order: 3; margin-top: 8.5px; font-style: italic; white-space: nowrap; }
+.timeline li:nth-child(even) { top: 36px; }
+.timeline li:nth-child(even)::before { height: 40px; }
+.timeline .tape--timeline { width: 316px; height: 56px; right: calc((100% - 100vw) / 2 * .6); top: 111px; transform: rotate(3.7deg); }
+
+/* ---------- проекты ---------- */
+
+.projects { background: var(--mauve); color: var(--bg); min-height: 965px; }
+.projects .wrap { padding-top: 88px; padding-bottom: 86px; }
+.projects .h2 + .text { max-width: 648px; margin-top: 52px; }
+
+.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); margin-top: 54px; }
+.card {
+  height: 517px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(245, 245, 245, .55);
+  transition: border-color .2s;
+}
+.card:hover { border-color: var(--bg); }
+.card__info {
+  position: relative;
+  min-height: 128px;          /* растёт, если плашки переносятся на узком экране */
+  flex: none;
+  padding: 20px 40px 14px 18px; /* справа место под стрелку */
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 17px;
+}
+.card__info b { display: block; margin-bottom: 10px; } /* отступы: строки описания 4 < заголовок 10 < плашки 18 */
+.card__tasks { display: block; margin-top: 4px; } /* мои задачи в проекте */
+.card__info .chev { position: absolute; top: 22px; right: 20px; width: 8px; }
+.card__tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+.card__tags span { background: var(--dark); color: var(--bg); font: italic 12px/15px var(--sans); padding: 6px 14px; } /* как .tag на странице проекта */
+.card__pic { flex: 1; position: relative; overflow: hidden; border: 1px solid rgba(245, 245, 245, .55); }
+.card__phone { position: absolute; top: 13px; left: 50%; width: 243px; max-width: none; transform: translateX(-50%); } /* телефон ~208 px, низ обрезан окошком, как в макете */
+.card--flip .card__info { order: 2; }
+
+/* ---------- контакты ---------- */
+
+.contacts .wrap { padding-top: 88px; padding-bottom: 106px; }
+.grid12 { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); }
+.contacts .grid12 { align-items: stretch; } /* фото по высоте всего содержимого раздела */
+.contacts__main { grid-column: 1 / 8; }               /* главное в блоке — контакты, фото справа и меньше */
+.contacts__lead { margin-top: 36px; }
+.contacts__list { margin-top: 48px; display: grid; gap: 32px; }
+.contacts__list dd { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; font: 500 28px/36px var(--sans); }
+.contacts__list a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.contacts__list a:hover { text-decoration-thickness: 2px; }
+.contacts__more { border-top: 1px solid rgba(51, 51, 51, .25); padding-top: 32px; } /* тонкая линия: дальше — где узнать обо мне больше */
+.contacts__copy { font-size: 14px; line-height: 17px; padding: 5px 10px; cursor: pointer; }
+.contacts__photo { grid-column: 9 / 13; height: auto; background: var(--mauve); position: relative; overflow: hidden; isolation: isolate; }
+.contacts__photo img {        /* монохром в цвет окна; кадр по лицу */
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 54% 50%;
+  filter: grayscale(1);
+  mix-blend-mode: luminosity;
+}
+
+/* ---------- страница проекта ---------- */
+
+.section { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+.section .wrap { padding-top: 88px; padding-bottom: 88px; }
+.cta .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px 48px; padding-top: 56px; padding-bottom: 56px; } /* контакты в конце страницы проекта */
+.cta__links { display: flex; flex-wrap: wrap; gap: 16px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); margin-top: 48px; } /* итог кейса: цифры */
+.stats dt { font: 700 48px/1 var(--mono); }
+.stats dd { margin-top: 12px; font-size: 16px; line-height: 20px; max-width: 300px; }
+.h2 + .text, .block .h2 + * { margin-top: 36px; }
+.block + .block { margin-top: 72px; } /* отступы: плашка→текст 12 < пункт→пункт 24 < заголовок→текст 36 < блок→блок 72 */
+.item { display: flex; flex-direction: column; align-items: flex-start; }
+.item .tag { margin-bottom: 12px; }
+.item + .item { margin-top: 24px; }
+.product .wrap { padding-bottom: 100px; min-height: 1402px; }
+.product .text { position: relative; z-index: 1; }
+
+.voice .text { max-width: 528px; }
+.voice .grid12 { row-gap: 36px; margin-top: 36px; }
+.voice .item { grid-column: span 6; max-width: 456px; }
+.voice .item + .item { margin-top: 0; }
+
+/* кусок рабочей таблицы, выглядывает справа */
+.sheets {                     /* стопка листов по центру раздела по высоте: отступы сверху и снизу равны */
+  position: absolute;
+  top: 50%;
+  left: calc(50% - var(--W) / 2 + 640px);
+  transform: translateY(calc(-50% + 6px)); /* +6: поправка на наклон листов */
+}
+.sheet {
+  position: relative;
+  width: 1060px;
+  padding: 28px 28px 36px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0,0,0,.06), 0 18px 40px rgba(0,0,0,.08);
+  transform: rotate(-2.5deg);
+  transform-origin: top left;
+  color: #222;
+  font: 12.5px/1.38 var(--sans);
+}
+.sheet__title { font: 700 13px/1 var(--mono); margin-bottom: 4px; }
+.sheet__sub { font-size: 11px; margin-bottom: 18px; }
+.sheet table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.sheet th, .sheet td { border: 1px solid #d6d6d6; padding: 8px 9px; text-align: left; vertical-align: top; }
+.sheet th { background: #eee; font-weight: 600; font-size: 11.5px; }
+.sheet--glossary { width: 900px; margin: -64px 0 0 -40px; transform: rotate(1.5deg); z-index: 2; }
+.sheet--glossary .was { color: var(--struck); text-decoration: line-through; text-decoration-color: rgba(138,138,138,.6); }
+.sheet--glossary td b { font-weight: 600; }
+.sheet__task { font-size: 12px; line-height: 1.4; max-width: 600px; margin: -6px 0 16px; } /* условие задания над таблицей */
+.sheet__task b { font-weight: 600; }
+.figma-level + .figma-level { margin-top: 18px; } /* лист из Figma: уровни челленджа */
+.figma-level__name { display: inline-block; margin-bottom: 8px; padding: 7px 10px; border: 1px solid #d6d6d6; border-radius: 6px; font: 600 12px/1 var(--sans); }
+.figma-level img { display: block; width: 100%; height: auto; }
+.product--challenge .wrap { min-height: 0; } /* высоту задаёт текст, листы стоят по центру — без пустоты снизу */
+.sheets--challenge .sheet--glossary { margin-top: -360px; } /* таблица лежит поверх обзора из Figma */
+
+/* итог и примеры */
+.results .text { max-width: 528px; }
+.examples { margin-top: 96px; }
+.ex { display: grid; grid-template-columns: repeat(12, 1fr); column-gap: var(--gap); align-items: start; }
+.ex + .ex { margin-top: 72px; padding-top: 72px; border-top: 1px solid rgba(51, 51, 51, .25); }
+.ex__text { grid-column: 1 / 5; }
+.ex__text > .tag { display: block; width: fit-content; } /* без строки вокруг — верх ровно по подписям над скринами */
+.ex__text .h3 { margin: 20px 0 16px; }
+.ex__text > p { font-size: 18px; line-height: 24px; }
+.lines { margin-top: 24px; font-size: 15px; line-height: 20px; }
+.lines p + p { margin-top: 12px; } /* зачёркнутое — было, дальше новый английский и русский */
+.lines .was { color: var(--struck); text-decoration: line-through; text-decoration-color: rgba(138,138,138,.6); }
+.ex__phones { grid-column: 5 / 13; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap); }
+.ex__phones figure { display: flex; flex-direction: column; align-items: center; }
+.ex__phones img { width: 100%; }
+.ex__phones--two figure:first-child { grid-column: 2; }
+.ex__phones--one figure { grid-column: 2; } /* один экран — по центру */ /* только EN → RU: под колонками «стало» и «перевод» */
+.ex__phones figcaption { margin-bottom: 12px; } /* над скрином, на одной линии с плашкой слева */
+
+.soon { margin-top: 36px; }
+
+/* соседние проекты внизу страницы */
+.pager .wrap { display: flex; justify-content: space-between; gap: var(--gap); padding: 72px 0 88px; }
+.pager__link { display: flex; align-items: center; gap: 18px; }
+.pager__link--next { margin-left: auto; }
+.pager__chev { width: 13px; height: 22px; flex: none; } /* та же стрелка, что у «все проекты» */
+.pager__name { font: 700 36px/1.32 var(--mono); }
+.pager__link:hover .pager__name { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; }
+
+/* ---------- узкие экраны ---------- */
+
+@media (max-width: 1100px) {
+  .header__nav { gap: 40px; }
+  .hero__block { left: 62%; }
+  .hero .wrap { padding-right: 40%; }
+  .h1 { font-size: 42px; line-height: 56px; }
+  .hero:not(.hero--project) .wrap { padding-right: 34%; } /* левый край блока прозрачный — заголовок помещается в две строки */
+  .timeline li { font-size: 12px; line-height: 15px; }
+  .tl__label { height: 30px; }
+  .timeline::before { top: 135px; }
+  .timeline li:nth-child(1) { left: 8%; }
+  .timeline li:nth-child(2) { left: 26%; }
+  .timeline li:nth-child(3) { left: 44%; }
+  .timeline li:nth-child(4) { left: 62%; }
+  .timeline li:nth-child(5) { left: 80%; }
+  .timeline .tape--timeline { display: none; }
+  .product .text { max-width: calc(52% - 24px); } /* место под стопку листов */
+  .sheets { left: 56%; }
+}
+
+@media (max-width: 860px) {
+  :root { --W: calc(100% - 32px); }
+  body { font-size: 18px; }
+  .h1 { font-size: 34px; line-height: 44px; }
+  .h2 { font-size: 28px; }
+  .h1 br { display: none; }
+
+  html { scroll-padding-top: 56px; }
+  .header { height: 56px; padding: 0 16px; }
+  .header__burger {             /* две полоски; в открытом меню — крестик */
+    display: flex; flex-direction: column; justify-content: center; gap: 6px;
+    width: 40px; height: 40px; margin-right: -8px; padding: 0 8px;
+    background: none; border: 0; cursor: pointer; color: var(--ink);
+  }
+  .header__burger span { display: block; height: 1.5px; background: currentColor; transition: transform .2s; }
+  .header.is-open .header__burger span:first-child { transform: translateY(3.75px) rotate(45deg); }
+  .header.is-open .header__burger span:last-child { transform: translateY(-3.75px) rotate(-45deg); }
+  .header__menu {               /* выпадает под шапкой */
+    display: none;
+    position: absolute; top: 100%; left: 0; right: 0;
+    padding: 8px 16px 24px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .header.is-open .header__menu { display: block; }
+  .header__nav { position: static; transform: none; flex-direction: column; gap: 0; }
+  .header__nav a { padding: 14px 0; font-size: 20px; }
+  .header__lang { margin-top: 8px; font-size: 16px; }
+  .header__lang a, .header__lang b { display: inline-block; padding: 14px 0; } /* по языку так же легко попасть пальцем */
+
+  .hero { min-height: 0; }
+  .hero .wrap, .hero:not(.hero--project) .wrap { padding: 64px 0 48px; }
+  .hero__block { position: relative; left: auto; height: 420px; }
+  .hero__block--mauve { height: auto; padding: 40px 0; }
+  .hero__block--fade { --fade: linear-gradient(to bottom, transparent 0, #000 14%); } /* блок под текстом: уходит в фон сверху, лицо не задевает */
+  .hero__photo { object-position: 50% 0%; }
+  .hero__phone { width: 260px; height: auto; max-height: none; }
+  .hero .tape { display: none; }
+  .tape-line { display: none; }
+
+  .about .wrap { padding: 64px 0; }
+  .about__text { text-align: left; margin-left: 0; }
+  .skills { align-items: flex-start; gap: 16px; margin-top: 32px; } /* строки переносятся — группы разделены шире */
+  .skills__row { justify-content: flex-start; }
+  .about .h2 { margin-top: 56px; }
+  .about .about__title { margin-top: 0; text-align: left; }
+  .timeline { height: auto; margin-top: 32px; padding-left: 28px; }
+  .timeline::before { left: 6px; right: auto; top: 0; bottom: 0; border-top: 0; border-left: 1px solid var(--line); }
+  .timeline li { position: relative; left: auto !important; transform: none; align-items: flex-start; margin-bottom: 24px; }
+  .timeline li::before { display: none; }
+  .timeline li::after { position: absolute; left: -28px; top: 2px; margin: 0; width: 12px; height: 12px; }
+  .tl__label { height: auto; align-items: flex-start; text-align: left; }
+  .timeline li:nth-child(even) { top: auto; }
+  .timeline li { font-size: 14px; line-height: 17px; }
+  .timeline time { margin-top: 4px; }
+
+  .projects { min-height: 0; }
+  .projects .wrap { padding: 64px 0; }
+  .cards { grid-template-columns: 1fr; }
+  .card { height: 420px; }
+
+  .contacts .wrap { padding: 64px 0; }
+  .contacts__main { grid-column: 1 / -1; }
+  .contacts__lead { margin-top: 24px; }
+  .contacts__list { margin-top: 32px; gap: 24px; }
+  .contacts__more { padding-top: 24px; }
+  .contacts__list dd { font-size: 22px; line-height: 28px; }
+  .contacts__photo { grid-column: 1 / -1; height: 360px; margin-top: 40px; }
+
+  .section .wrap { padding: 64px 0; }
+  .block + .block { margin-top: 56px; }
+  .cta .wrap { padding: 48px 0; }
+  .stats { grid-template-columns: 1fr; gap: 28px; margin-top: 32px; }
+  .stats dt { font-size: 36px; }
+  .product .wrap { min-height: 0; }
+  .product .text { max-width: none; } /* листы уходят под текст — текст снова на всю ширину */
+  .sheets { position: relative; top: auto; left: 8px; transform: none; margin: 56px 0 24px; }
+  .sheet { width: 860px; }
+  .sheet--glossary { width: 760px; margin: -40px 0 0 -12px; }
+  .sheets--challenge .sheet--glossary { margin-top: -240px; }
+  .voice .item { grid-column: 1 / -1; }
+
+  .examples { margin-top: 56px; }
+  .ex + .ex { margin-top: 48px; padding-top: 48px; }
+  .ex__text, .ex__phones { grid-column: 1 / -1; }
+  .ex__phones { margin-top: 28px; gap: 8px; }
+  .ex__phones .tag { padding: 5px 8px; font-size: 11px; }
+
+  .pager .wrap { padding: 48px 0 56px; }
+  .pager__name { font-size: 20px; }
+  .pager__chev { width: 8px; height: 14px; }
+  .pager__link { gap: 10px; }
+}
