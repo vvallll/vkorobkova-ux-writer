@@ -170,7 +170,7 @@ h2, h3 { text-wrap: balance; }
 /* ---------- обо мне ---------- */
 
 .about .wrap { padding-top: 88px; padding-bottom: 88px; } /* как у остальных разделов */
-.about__text { margin-left: auto; text-align: right; }
+.about__text { max-width: 744px; margin-left: auto; text-align: right; } /* 8 колонок сетки, ~70 знаков в строке */
 .skills { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; margin-top: 40px; } /* навыки: строка инструментов, строка умений */
 .skills__row { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 .about .h2 { margin-top: 72px; } /* «Мой опыт»: как между блоками на страницах проектов */
